@@ -2,6 +2,8 @@
 
 **Snap a photo of a neighborhood problem — AI categorizes it, pins it on a public map, and tracks it to "Fixed."**
 
+**🔗 Live demo: https://civicsnap-one.vercel.app**
+
 CivicSnap turns civic reporting into a 20-second action. Residents photograph an issue
 (pothole, broken street light, illegal dumping, graffiti…); Claude vision reads the image,
 assigns a category and severity, and writes a clear title. The report drops a pin on a
@@ -41,4 +43,8 @@ npm run dev
 
 ## Project status
 
-Built in stages — see the commit history. Live demo and architecture diagram added at launch.
+Live in production on Vercel, backed by Supabase (Postgres + RLS + Storage + Realtime
++ an Edge Function for Claude vision). Built in staged commits — see the history.
+
+To enable AI photo classification, set an `ANTHROPIC_API_KEY` secret on the
+`classify-photo` edge function; without it the app falls back to manual entry.
