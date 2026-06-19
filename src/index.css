@@ -1,61 +1,60 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Archivo Black', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  --color-brand-50: #ecfdf5;
-  --color-brand-100: #d1fae5;
-  --color-brand-200: #a7f3d0;
-  --color-brand-300: #6ee7b7;
-  --color-brand-400: #34d399;
-  --color-brand-500: #10b981;
-  --color-brand-600: #059669;
-  --color-brand-700: #047857;
-  --color-brand-800: #065f46;
-  --color-brand-900: #064e3b;
+  /* "brand" = the single hazard-red accent of the system. */
+  --color-brand-50: #fff1f1;
+  --color-brand-100: #ffdcdc;
+  --color-brand-200: #ffbdbd;
+  --color-brand-300: #ff8f8f;
+  --color-brand-400: #ff4d4d;
+  --color-brand-500: #e61919;
+  --color-brand-600: #cc0f0f;
+  --color-brand-700: #a80d0d;
+  --color-brand-800: #850b0b;
+  --color-brand-900: #5e0808;
 
-  /* Signature secondary + accent for the new identity */
-  --color-teal-400: #2dd4bf;
-  --color-teal-500: #14b8a6;
-  --color-cyan-400: #22d3ee;
-  --color-lime-300: #bef264;
-  --color-lime-400: #a3e635;
-  --color-amber-400: #fbbf24;
+  --color-ink-50: #f4f4f0;
+  --color-ink-100: #eae8e3;
+  --color-ink-200: #d8d6cf;
+  --color-ink-300: #b9b6ad;
+  --color-ink-400: #8a877e;
+  --color-ink-500: #5f5d56;
+  --color-ink-600: #423f3a;
+  --color-ink-700: #2a2825;
+  --color-ink-800: #1a1917;
+  --color-ink-900: #0a0a0a;
 
-  --color-ink-50: #f8fafc;
-  --color-ink-100: #f1f5f9;
-  --color-ink-200: #e2e8f0;
-  --color-ink-300: #cbd5e1;
-  --color-ink-400: #94a3b8;
-  --color-ink-500: #64748b;
-  --color-ink-600: #475569;
-  --color-ink-700: #334155;
-  --color-ink-800: #1e293b;
-  --color-ink-900: #0f172a;
-  --color-ink-950: #060c1a;
-
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --radius: 0px; /* mechanical rigidity — no rounded corners */
 }
 
+/* Swiss Industrial Print (light) — default substrate */
 :root {
-  --bg: #f6f9f8;
-  --bg-elevated: #ffffff;
-  --bg-muted: #eef3f1;
-  --border: #e2e8e6;
-  --text: var(--color-ink-900);
-  --text-muted: var(--color-ink-500);
-  --grid-line: rgba(15, 23, 42, 0.05);
+  --bg: #f4f4f0;
+  --bg-elevated: #fbfbf8;
+  --bg-muted: #eae8e3;
+  --border: #0a0a0a;
+  --border-soft: #c9c7c0;
+  --text: #0a0a0a;
+  --text-muted: #5f5d56;
+  --accent: #e61919;
+  --grid-line: rgba(10, 10, 10, 0.06);
 }
 
+/* Tactical Telemetry (dark) — CRT terminal substrate */
 .dark {
-  --bg: #060c1a;
-  --bg-elevated: #0c1424;
-  --bg-muted: #131d31;
-  --border: #1d2940;
-  --text: var(--color-ink-50);
-  --text-muted: #8aa0bd;
-  --grid-line: rgba(148, 197, 180, 0.06);
+  --bg: #0a0a0a;
+  --bg-elevated: #121212;
+  --bg-muted: #181818;
+  --border: #eaeaea;
+  --border-soft: #2a2a2a;
+  --text: #eaeaea;
+  --text-muted: #8a877e;
+  --accent: #ff2a2a;
+  --grid-line: rgba(234, 234, 234, 0.06);
 }
 
 html,
@@ -73,9 +72,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, .font-display {
+/* Global mechanical rigidity: kill rounded corners everywhere. */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+h1, h2, h3 {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
 }
 
 @layer utilities {
@@ -83,84 +91,87 @@ h1, h2, h3, .font-display {
   .bg-surface { background-color: var(--bg-elevated); }
   .bg-muted2 { background-color: var(--bg-muted); }
   .border-app { border-color: var(--border); }
+  .border-soft { border-color: var(--border-soft); }
   .text-app { color: var(--text); }
   .text-soft { color: var(--text-muted); }
+  .text-accent { color: var(--accent); }
+  .bg-accent { background-color: var(--accent); }
 
-  /* Signature animated gradient text */
-  .text-gradient {
-    background: linear-gradient(110deg, #34d399, #2dd4bf 35%, #22d3ee 60%, #a3e635 90%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradient-pan 6s linear infinite;
+  .font-display { font-family: var(--font-display); }
+  .font-mono { font-family: var(--font-mono); }
+
+  /* Telemetry label: small, uppercase, tracked monospace */
+  .telemetry {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
   }
 
-  /* Faint map-grid backdrop */
+  /* Blueprint grid backdrop */
   .bg-grid {
     background-image:
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 44px 44px;
+    background-size: 40px 40px;
   }
 
-  /* Glass card */
-  .glass {
-    background: color-mix(in oklab, var(--bg-elevated) 70%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  /* hairline-grid via gap:1px trick (parent sets ink bg, children paper bg) */
+  .rule-grid {
+    background-color: var(--border);
+    display: grid;
+    gap: 1px;
   }
 
-  .glow-brand {
-    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.25), 0 18px 60px -12px rgba(16, 185, 129, 0.35);
-  }
-
-  .animate-float { animation: float 7s ease-in-out infinite; }
-  .animate-float-slow { animation: float 11s ease-in-out infinite; }
-  .animate-marquee { animation: marquee 32s linear infinite; }
-  .animate-blob { animation: blob 18s ease-in-out infinite; }
-
-  .mask-fade-x {
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  /* CRT scanlines (dark mode only) */
+  .dark .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.18) 2px,
+      rgba(0, 0, 0, 0.18) 4px
+    );
+    mix-blend-mode: multiply;
   }
 }
 
-@keyframes gradient-pan {
-  to { background-position: 200% center; }
+/* Global film grain — fixed, never on scroll containers. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-@keyframes blob {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(24px, -30px) scale(1.08); }
-  66% { transform: translate(-20px, 16px) scale(0.95); }
-}
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-@keyframes pulse-ring {
-  0% { transform: scale(0.6); opacity: 0.7; }
-  100% { transform: scale(2.4); opacity: 0; }
-}
-@keyframes pin-drop {
-  0% { transform: translateY(-26px) scale(0.6); opacity: 0; }
-  60% { transform: translateY(4px) scale(1.05); opacity: 1; }
-  100% { transform: translateY(0) scale(1); opacity: 1; }
+.animate-marquee { animation: marquee 30s linear infinite; }
+
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
 
 /* Leaflet tweaks so the map matches app chrome. */
 .leaflet-container {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   background: var(--bg-muted);
 }

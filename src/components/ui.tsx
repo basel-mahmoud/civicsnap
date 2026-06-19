@@ -3,19 +3,22 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 type Size = 'sm' | 'md' | 'lg'
 
+// Industrial brutalist: square, bordered, no glow. Uppercase mono-ish labels,
+// invert on hover, physical press via translate.
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'text-ink-950 font-semibold bg-[linear-gradient(110deg,#34d399,#2dd4bf_55%,#22d3ee)] bg-[length:200%_auto] hover:bg-right shadow-[0_10px_30px_-8px_rgba(45,212,191,0.6)] hover:shadow-[0_14px_40px_-8px_rgba(45,212,191,0.75)] active:scale-[0.98] transition-all disabled:opacity-60',
+    'bg-[var(--text)] text-[var(--bg)] border-2 border-[var(--text)] hover:bg-[var(--accent)] hover:border-[var(--accent)] hover:text-white active:translate-y-[2px] transition-colors disabled:opacity-40',
   secondary:
-    'glass text-app border border-app hover:border-brand-400/60 hover:bg-muted2 active:scale-[0.98] transition-all disabled:opacity-50',
-  ghost: 'text-app hover:bg-muted2 disabled:opacity-50 transition-colors',
-  danger: 'bg-red-600 text-white hover:bg-red-700 active:scale-[0.98] transition-all disabled:bg-red-300',
+    'bg-transparent text-app border-2 border-[var(--text)] hover:bg-[var(--text)] hover:text-[var(--bg)] active:translate-y-[2px] transition-colors disabled:opacity-40',
+  ghost: 'text-app border-2 border-transparent hover:bg-muted2 active:translate-y-[2px] transition-colors disabled:opacity-40',
+  danger:
+    'bg-[var(--accent)] text-white border-2 border-[var(--accent)] hover:bg-[var(--text)] hover:border-[var(--text)] active:translate-y-[2px] transition-colors disabled:opacity-40',
 }
 
 const SIZES: Record<Size, string> = {
-  sm: 'h-9 px-4 text-sm rounded-full gap-1.5',
-  md: 'h-11 px-5 text-sm rounded-full gap-2',
-  lg: 'h-13 px-7 text-base rounded-full gap-2',
+  sm: 'h-9 px-4 text-xs gap-1.5',
+  md: 'h-11 px-5 text-sm gap-2',
+  lg: 'h-14 px-8 text-sm gap-2.5',
 }
 
 export function Button({
@@ -32,7 +35,7 @@ export function Button({
 }) {
   return (
     <button
-      className={`inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-semibold uppercase tracking-wide font-mono focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       disabled={loading || props.disabled}
       {...props}
     >
