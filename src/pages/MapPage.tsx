@@ -7,6 +7,7 @@ import { CATEGORY_LIST, type CategoryId, type ReportStatus } from '@/lib/categor
 import { ReportsMap } from '@/components/map/ReportsMap'
 import { ReportCard } from '@/components/ReportCard'
 import { Button, Spinner } from '@/components/ui'
+import { Icon } from '@/components/icons/Icon'
 
 type StatusFilter = 'all' | 'open' | ReportStatus
 
@@ -111,7 +112,9 @@ export function MapPage() {
               </button>
             </div>
             <Link to="/report">
-              <Button size="sm">+ Report</Button>
+              <Button size="sm">
+                <Icon name="plus" size={15} /> Report
+              </Button>
             </Link>
           </div>
         </div>

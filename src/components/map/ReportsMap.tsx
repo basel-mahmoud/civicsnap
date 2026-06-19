@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import type { Report } from '@/lib/types'
 import { categoryMeta } from '@/lib/categories'
 import { categoryIcon } from './icons'
+import { Icon } from '@/components/icons/Icon'
 
 function FitBounds({ reports }: { reports: Report[] }) {
   const map = useMap()
@@ -48,8 +49,9 @@ export function ReportsMap({
           <Popup>
             <div className="min-w-44">
               <p className="font-semibold text-sm text-ink-900">{r.title}</p>
-              <p className="text-xs text-ink-500 mt-0.5">
-                {categoryMeta(r.category).label} · {r.upvote_count} 👍
+              <p className="inline-flex items-center gap-1 text-xs text-ink-500 mt-0.5">
+                {categoryMeta(r.category).label} · {r.upvote_count}
+                <Icon name="thumbs-up" size={12} />
               </p>
               <button
                 onClick={() => navigate(`/report/${r.id}`)}

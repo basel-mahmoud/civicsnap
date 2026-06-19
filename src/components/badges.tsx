@@ -6,12 +6,13 @@ import {
   type Severity,
 } from '@/lib/categories'
 import { Badge } from './ui'
+import { Icon } from './icons/Icon'
 
 export function CategoryBadge({ category }: { category: string }) {
   const m = categoryMeta(category)
   return (
     <Badge color={m.color} bg={`${m.color}1f`}>
-      <span>{m.emoji}</span>
+      <Icon name={m.icon} size={13} />
       {m.label}
     </Badge>
   )

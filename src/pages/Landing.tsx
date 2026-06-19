@@ -1,20 +1,21 @@
 import { Link } from 'react-router-dom'
 import { CATEGORY_LIST } from '@/lib/categories'
 import { Button } from '@/components/ui'
+import { Icon, type IconName } from '@/components/icons/Icon'
 
-const STEPS = [
+const STEPS: { icon: IconName; title: string; body: string }[] = [
   {
-    emoji: '📸',
+    icon: 'camera',
     title: 'Snap a photo',
     body: 'See a pothole, broken light, or dumped trash? Take a picture right from your phone.',
   },
   {
-    emoji: '🤖',
+    icon: 'sparkles',
     title: 'AI sorts it out',
     body: 'Claude vision reads the photo, picks the category, rates severity, and writes a clear title.',
   },
   {
-    emoji: '📍',
+    icon: 'route',
     title: 'Track to fixed',
     body: 'Your report drops a pin on the public map and moves from Reported → Acknowledged → Fixed.',
   },
@@ -65,7 +66,9 @@ export function Landing() {
           {STEPS.map((s, i) => (
             <div key={s.title} className="bg-surface border border-app rounded-2xl p-6">
               <div className="flex items-center justify-between">
-                <span className="text-3xl">{s.emoji}</span>
+                <span className="grid size-11 place-items-center rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-600">
+                  <Icon name={s.icon} size={22} />
+                </span>
                 <span className="text-sm font-bold text-soft">0{i + 1}</span>
               </div>
               <h3 className="mt-4 text-lg font-semibold text-app">{s.title}</h3>
@@ -87,7 +90,7 @@ export function Landing() {
               key={c.id}
               className="inline-flex items-center gap-2 rounded-full border border-app bg-surface px-4 py-2 text-sm font-medium text-app"
             >
-              <span>{c.emoji}</span>
+              <Icon name={c.icon} size={16} style={{ color: c.color }} />
               {c.label}
             </span>
           ))}

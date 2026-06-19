@@ -5,6 +5,7 @@ import { listMyReports } from '@/lib/api'
 import type { Report } from '@/lib/types'
 import { ReportCard } from '@/components/ReportCard'
 import { Button, Spinner } from '@/components/ui'
+import { Icon } from '@/components/icons/Icon'
 
 export function MyReports() {
   const { session } = useAuth()
@@ -23,7 +24,9 @@ export function MyReports() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-app">My reports</h1>
         <Link to="/report">
-          <Button size="sm">+ New report</Button>
+          <Button size="sm">
+            <Icon name="plus" size={15} /> New report
+          </Button>
         </Link>
       </div>
 

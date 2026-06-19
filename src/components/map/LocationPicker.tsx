@@ -3,6 +3,7 @@ import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { draggableMarkerIcon } from './icons'
 import { Button } from '@/components/ui'
+import { Icon } from '@/components/icons/Icon'
 
 export interface LatLng {
   lat: number
@@ -84,7 +85,7 @@ export function LocationPicker({
             : 'Set the location of the issue.'}
         </span>
         <Button type="button" size="sm" variant="secondary" onClick={useMyLocation} loading={locating}>
-          📍 My location
+          <Icon name="map-pin" size={14} /> My location
         </Button>
       </div>
 

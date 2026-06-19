@@ -1,6 +1,7 @@
 import { STATUS_FLOW, STATUS_META, type ReportStatus } from '@/lib/categories'
 import type { StatusEvent } from '@/lib/types'
 import { fullDate } from '@/lib/time'
+import { Icon } from './icons/Icon'
 
 // Horizontal pipeline showing where the report is, plus the event log.
 export function StatusTimeline({
@@ -30,7 +31,7 @@ export function StatusTimeline({
                     }`}
                     style={done ? { backgroundColor: meta.color } : undefined}
                   >
-                    {done ? '✓' : i + 1}
+                    {done ? <Icon name="check" size={15} /> : i + 1}
                   </span>
                   <span
                     className={`mt-1 text-[11px] font-medium ${isCurrent ? 'text-app' : 'text-soft'}`}

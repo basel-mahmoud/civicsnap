@@ -18,6 +18,7 @@ import { CategoryBadge, SeverityBadge, StatusBadge } from '@/components/badges'
 import { StatusTimeline } from '@/components/StatusTimeline'
 import { ReportsMap } from '@/components/map/ReportsMap'
 import { Button, Card, Spinner, inputClass } from '@/components/ui'
+import { Icon } from '@/components/icons/Icon'
 import { fullDate, timeAgo } from '@/lib/time'
 
 export function ReportDetail() {
@@ -140,8 +141,8 @@ export function ReportDetail() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-6">
-      <Link to="/map" className="text-sm text-soft hover:text-app">
-        ← Back to map
+      <Link to="/map" className="inline-flex items-center gap-1 text-sm text-soft hover:text-app">
+        <Icon name="arrow-left" size={15} /> Back to map
       </Link>
 
       <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
@@ -159,7 +160,7 @@ export function ReportDetail() {
               : 'border-app bg-surface text-app hover:border-brand-400'
           }`}
         >
-          👍 <span>{report.upvote_count}</span>
+          <Icon name="thumbs-up" size={18} /> <span>{report.upvote_count}</span>
         </button>
       </div>
 
@@ -221,7 +222,9 @@ export function ReportDetail() {
           <ReportsMap reports={[report]} className="h-full" focusId={report.id} />
         </div>
         {report.address && (
-          <p className="px-4 py-3 text-sm text-soft border-t border-app">📍 {report.address}</p>
+          <p className="flex items-center gap-1.5 px-4 py-3 text-sm text-soft border-t border-app">
+            <Icon name="map-pin" size={15} /> {report.address}
+          </p>
         )}
       </Card>
 

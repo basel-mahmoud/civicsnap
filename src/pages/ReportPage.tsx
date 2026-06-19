@@ -11,6 +11,7 @@ import {
   type LatLng,
 } from '@/components/map/LocationPicker'
 import { Button, Card, Field, Spinner, inputClass } from '@/components/ui'
+import { Icon } from '@/components/icons/Icon'
 
 export function ReportPage() {
   const { session } = useAuth()
@@ -133,7 +134,7 @@ export function ReportPage() {
               onClick={() => fileRef.current?.click()}
               className="mt-3 w-full rounded-xl border-2 border-dashed border-app bg-muted2 py-10 grid place-items-center text-soft hover:border-brand-500 hover:text-app transition"
             >
-              <span className="text-3xl">📷</span>
+              <Icon name="camera" size={32} />
               <span className="mt-2 font-medium">Take or choose a photo</span>
               <span className="text-xs">JPG / PNG / WEBP · up to 5 MB</span>
             </button>
@@ -158,8 +159,8 @@ export function ReportPage() {
 
               {ai && !classifying && ai.confidence > 0 && (
                 <div className="rounded-xl bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 px-3 py-2 text-sm">
-                  <span className="font-medium text-brand-700 dark:text-brand-300">
-                    🤖 AI suggestion
+                  <span className="inline-flex items-center gap-1 font-medium text-brand-700 dark:text-brand-300 align-middle">
+                    <Icon name="sparkles" size={14} /> AI suggestion
                   </span>{' '}
                   <span className="text-app">
                     {ai.is_valid_issue

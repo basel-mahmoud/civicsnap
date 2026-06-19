@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { useTheme } from '@/lib/theme'
 import { Logo } from './Logo'
 import { Button } from './ui'
+import { Icon } from './icons/Icon'
 
 function navClass({ isActive }: { isActive: boolean }) {
   return `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -48,7 +49,7 @@ export function Layout() {
               className="size-9 grid place-items-center rounded-lg text-soft hover:text-app hover:bg-muted2 transition"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? '☀️' : '🌙'}
+              <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18} />
             </button>
 
             {session ? (

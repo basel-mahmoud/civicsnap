@@ -1,6 +1,8 @@
 // Canonical issue categories. The AI vision model is constrained to this set,
 // and the UI derives pin colors, icons, and labels from it.
 
+import type { IconName } from '@/components/icons/paths'
+
 export type CategoryId =
   | 'pothole'
   | 'streetlight'
@@ -24,6 +26,8 @@ export interface CategoryMeta {
   id: CategoryId
   label: string
   emoji: string
+  /** Outline icon name (used everywhere except plain <option> text). */
+  icon: IconName
   /** Tailwind/inline hex used for map pins and badges. */
   color: string
   description: string
@@ -34,6 +38,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'pothole',
     label: 'Pothole / Road damage',
     emoji: '🕳️',
+    icon: 'construction',
     color: '#b45309',
     description: 'Damaged road surface, potholes, cracks',
   },
@@ -41,6 +46,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'streetlight',
     label: 'Street light',
     emoji: '💡',
+    icon: 'lightbulb',
     color: '#ca8a04',
     description: 'Broken, flickering, or dark street lighting',
   },
@@ -48,6 +54,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'graffiti',
     label: 'Graffiti / Vandalism',
     emoji: '🎨',
+    icon: 'spray-can',
     color: '#7c3aed',
     description: 'Graffiti, tagging, or property vandalism',
   },
@@ -55,6 +62,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'trash',
     label: 'Trash / Illegal dumping',
     emoji: '🗑️',
+    icon: 'trash',
     color: '#15803d',
     description: 'Litter, overflowing bins, illegal dumping',
   },
@@ -62,6 +70,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'water',
     label: 'Water / Drainage',
     emoji: '💧',
+    icon: 'droplets',
     color: '#0284c7',
     description: 'Leaks, flooding, blocked drains, hydrants',
   },
@@ -69,6 +78,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'sign',
     label: 'Signage',
     emoji: '🚸',
+    icon: 'signpost',
     color: '#dc2626',
     description: 'Damaged, missing, or obscured signs',
   },
@@ -76,6 +86,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'sidewalk',
     label: 'Sidewalk / Access',
     emoji: '🦽',
+    icon: 'accessibility',
     color: '#0d9488',
     description: 'Broken sidewalks, curbs, accessibility hazards',
   },
@@ -83,6 +94,7 @@ export const CATEGORIES: Record<CategoryId, CategoryMeta> = {
     id: 'other',
     label: 'Other',
     emoji: '📍',
+    icon: 'map-pin',
     color: '#64748b',
     description: 'Anything else affecting the neighborhood',
   },

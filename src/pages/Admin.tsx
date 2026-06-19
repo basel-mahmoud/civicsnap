@@ -10,6 +10,7 @@ import {
 } from '@/lib/categories'
 import { CategoryBadge, SeverityBadge, StatusBadge } from '@/components/badges'
 import { Card, Spinner } from '@/components/ui'
+import { Icon } from '@/components/icons/Icon'
 import { timeAgo } from '@/lib/time'
 
 export function Admin() {
@@ -107,8 +108,8 @@ export function Admin() {
                   <StatusBadge status={r.status} />
                   <CategoryBadge category={r.category} />
                   <SeverityBadge severity={r.severity} />
-                  <span className="text-xs text-soft self-center">
-                    👍 {r.upvote_count} · {timeAgo(r.created_at)}
+                  <span className="inline-flex items-center gap-1 text-xs text-soft self-center">
+                    <Icon name="thumbs-up" size={13} /> {r.upvote_count} · {timeAgo(r.created_at)}
                   </span>
                 </div>
               </div>

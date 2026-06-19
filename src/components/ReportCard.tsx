@@ -3,6 +3,7 @@ import type { Report } from '@/lib/types'
 import { photoPublicUrl } from '@/lib/supabase'
 import { timeAgo } from '@/lib/time'
 import { CategoryBadge, SeverityBadge, StatusBadge } from './badges'
+import { Icon } from './icons/Icon'
 
 export function ReportCard({ report }: { report: Report }) {
   const img = photoPublicUrl(report.photo_path)
@@ -19,8 +20,8 @@ export function ReportCard({ report }: { report: Report }) {
           className="size-20 shrink-0 rounded-xl object-cover bg-muted2"
         />
       ) : (
-        <div className="size-20 shrink-0 rounded-xl bg-muted2 grid place-items-center text-2xl">
-          📍
+        <div className="size-20 shrink-0 rounded-xl bg-muted2 grid place-items-center text-soft">
+          <Icon name="map-pin" size={24} />
         </div>
       )}
       <div className="min-w-0 flex-1">
