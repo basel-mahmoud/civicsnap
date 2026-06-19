@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react'
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, Marker, useMap } from 'react-leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { draggableMarkerIcon } from './icons'
+import { ThemedTiles } from './ThemedTiles'
 import { Button } from '@/components/ui'
 import { Icon } from '@/components/icons/Icon'
+import { DEFAULT_CENTER, type LatLng } from '@/lib/geo'
 
-export interface LatLng {
-  lat: number
-  lng: number
-}
-
-// Default view (used until we have a real location).
-const FALLBACK: LatLng = { lat: 40.7128, lng: -74.006 }
+export type { LatLng }
 
 function ClickAndRecenter({
   value,
@@ -44,7 +40,7 @@ export function LocationPicker({
 }) {
   const [locating, setLocating] = useState(false)
   const [geoError, setGeoError] = useState<string | null>(null)
-  const center = value ?? FALLBACK
+  const center = value ?? DEFAULT_CENTER
 
   function useMyLocation() {
     setGeoError(null)
@@ -96,10 +92,7 @@ export function LocationPicker({
           style={{ height: '100%', width: '100%' }}
           scrollWheelZoom
         >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          <ThemedTiles />
           {value && (
             <Marker
               position={[value.lat, value.lng]}

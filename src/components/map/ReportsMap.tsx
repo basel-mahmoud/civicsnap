@@ -1,69 +1,88 @@
-import { useEffect, useMemo } from 'react'
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
-import L from 'leaflet'
+import { useEffect } from 'react'
+import { MapContainer, Marker, Popup, useMap } from 'react-leaflet'
 import { useNavigate } from 'react-router-dom'
 import type { Report } from '@/lib/types'
 import { categoryMeta } from '@/lib/categories'
+import { DEFAULT_CENTER, DEFAULT_ZOOM, type LatLng } from '@/lib/geo'
 import { categoryIcon } from './icons'
+import { ThemedTiles } from './ThemedTiles'
+import { LocateControl } from './LocateControl'
 import { Icon } from '@/components/icons/Icon'
 
-function FitBounds({ reports }: { reports: Report[] }) {
+// Keeps the Leaflet view in sync when the desired center changes (e.g. once the
+// user's geolocation resolves after first paint).
+function Recenter({ center, zoom }: { center: LatLng; zoom: number }) {
   const map = useMap()
   useEffect(() => {
-    if (reports.length === 0) return
-    const bounds = L.latLngBounds(reports.map((r) => [r.lat, r.lng] as [number, number]))
-    map.fitBounds(bounds, { padding: [48, 48], maxZoom: 16 })
-  }, [reports, map])
+    map.setView([center.lat, center.lng], zoom, { animate: true })
+  }, [center.lat, center.lng]) // eslint-disable-line react-hooks/exhaustive-deps
+  return null
+}
+
+// Leaflet can initialise with a 0-height container when it mounts inside a flex
+// layout before the browser settles sizes. Re-measure shortly after mount and on
+// resize so tiles always render.
+function InvalidateSize() {
+  const map = useMap()
+  useEffect(() => {
+    const fix = () => map.invalidateSize()
+    const t = setTimeout(fix, 150)
+    window.addEventListener('resize', fix)
+    return () => {
+      clearTimeout(t)
+      window.removeEventListener('resize', fix)
+    }
+  }, [map])
   return null
 }
 
 export function ReportsMap({
   reports,
   className = '',
-  focusId,
+  center = DEFAULT_CENTER,
+  zoom = DEFAULT_ZOOM,
+  showLocate = false,
 }: {
   reports: Report[]
   className?: string
-  focusId?: string
+  center?: LatLng
+  zoom?: number
+  showLocate?: boolean
 }) {
   const navigate = useNavigate()
-  const center = useMemo<[number, number]>(() => {
-    if (reports.length) return [reports[0].lat, reports[0].lng]
-    return [40.7128, -74.006]
-  }, [reports])
 
   return (
     <MapContainer
-      center={center}
-      zoom={13}
+      center={[center.lat, center.lng]}
+      zoom={zoom}
       className={className}
-      style={{ height: '100%', width: '100%' }}
+      style={{ position: 'absolute', inset: 0, height: '100%', width: '100%' }}
       scrollWheelZoom
+      zoomControl={false}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {reports.map((r) => (
-        <Marker key={r.id} position={[r.lat, r.lng]} icon={categoryIcon(r.category)}>
-          <Popup>
-            <div className="min-w-44">
-              <p className="font-semibold text-sm text-ink-900">{r.title}</p>
-              <p className="inline-flex items-center gap-1 text-xs text-ink-500 mt-0.5">
-                {categoryMeta(r.category).label} · {r.upvote_count}
-                <Icon name="thumbs-up" size={12} />
-              </p>
-              <button
-                onClick={() => navigate(`/report/${r.id}`)}
-                className="mt-2 text-xs font-medium text-brand-700 hover:underline"
-              >
-                View details →
-              </button>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
-      {focusId ? null : <FitBounds reports={reports} />}
+        <ThemedTiles />
+        {reports.map((r) => (
+          <Marker key={r.id} position={[r.lat, r.lng]} icon={categoryIcon(r.category)}>
+            <Popup>
+              <div className="min-w-44">
+                <p className="font-semibold text-sm text-ink-900">{r.title}</p>
+                <p className="inline-flex items-center gap-1 text-xs text-ink-500 mt-0.5">
+                  {categoryMeta(r.category).label} · {r.upvote_count}
+                  <Icon name="thumbs-up" size={12} />
+                </p>
+                <button
+                  onClick={() => navigate(`/report/${r.id}`)}
+                  className="mt-2 text-xs font-medium text-brand-700 hover:underline"
+                >
+                  View details →
+                </button>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      <Recenter center={center} zoom={zoom} />
+      <InvalidateSize />
+      {showLocate && <LocateControl />}
     </MapContainer>
   )
 }

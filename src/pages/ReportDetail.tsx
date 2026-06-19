@@ -218,8 +218,12 @@ export function ReportDetail() {
 
       {/* Location */}
       <Card className="mt-5 p-0 overflow-hidden">
-        <div className="h-56">
-          <ReportsMap reports={[report]} className="h-full" focusId={report.id} />
+        <div className="relative h-64">
+          <ReportsMap
+            reports={[report]}
+            center={{ lat: report.lat, lng: report.lng }}
+            zoom={16}
+          />
         </div>
         {report.address && (
           <p className="flex items-center gap-1.5 px-4 py-3 text-sm text-soft border-t border-app">

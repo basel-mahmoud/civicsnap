@@ -4,6 +4,7 @@ import { listReports, type ReportFilters } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import type { Report } from '@/lib/types'
 import { CATEGORY_LIST, type CategoryId, type ReportStatus } from '@/lib/categories'
+import { DEFAULT_CENTER, useUserLocation } from '@/lib/geo'
 import { ReportsMap } from '@/components/map/ReportsMap'
 import { ReportCard } from '@/components/ReportCard'
 import { Button, Spinner } from '@/components/ui'
@@ -18,6 +19,9 @@ export function MapPage() {
   const [category, setCategory] = useState<CategoryId | 'all'>('all')
   const [status, setStatus] = useState<StatusFilter>('all')
   const [mobileView, setMobileView] = useState<'map' | 'list'>('map')
+
+  const { coords, status: geoStatus } = useUserLocation()
+  const center = coords ?? DEFAULT_CENTER
 
   const filters = useMemo<ReportFilters>(() => ({ category, status }), [category, status])
 
@@ -57,7 +61,7 @@ export function MapPage() {
     <div className="flex-1 flex flex-col">
       {/* Filter bar */}
       <div className="border-b border-app bg-surface">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center gap-2">
+        <div className="mx-auto max-w-7xl px-4 py-3 flex flex-wrap items-center gap-2">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as CategoryId | 'all')}
@@ -97,7 +101,7 @@ export function MapPage() {
 
           <div className="ml-auto flex items-center gap-2">
             {/* Mobile view toggle */}
-            <div className="sm:hidden flex rounded-lg border border-app overflow-hidden text-sm">
+            <div className="md:hidden flex rounded-lg border border-app overflow-hidden text-sm">
               <button
                 onClick={() => setMobileView('map')}
                 className={`px-3 h-9 ${mobileView === 'map' ? 'bg-muted2 text-app' : 'text-soft'}`}
@@ -121,42 +125,50 @@ export function MapPage() {
       </div>
 
       {error && (
-        <div className="mx-auto max-w-6xl w-full px-4 py-3">
+        <div className="mx-auto max-w-7xl w-full px-4 py-3">
           <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-500">{error}</p>
         </div>
       )}
 
-      {/* Split layout */}
-      <div className="flex-1 mx-auto max-w-6xl w-full grid sm:grid-cols-[1fr_360px] gap-0 sm:gap-4 sm:px-4 sm:py-4">
-        {/* Map */}
-        <div
-          className={`${mobileView === 'map' ? 'block' : 'hidden'} sm:block min-h-[60vh] sm:min-h-[70vh] sm:rounded-2xl overflow-hidden border-app sm:border`}
+      {/* Full-height split: list sidebar + immersive map */}
+      <div className="flex flex-col-reverse md:flex-row">
+        {/* List */}
+        <aside
+          className={`${mobileView === 'list' ? 'flex' : 'hidden'} md:flex w-full md:w-[380px] md:shrink-0 flex-col border-r border-app bg-app h-[60vh] md:h-[calc(100vh-8.5rem)] overflow-y-auto`}
         >
           {loading && reports.length === 0 ? (
-            <div className="h-full grid place-items-center text-soft">
+            <div className="grid place-items-center py-16 text-soft">
               <Spinner />
             </div>
-          ) : (
-            <ReportsMap reports={reports} className="h-full" />
-          )}
-        </div>
-
-        {/* List */}
-        <div
-          className={`${mobileView === 'list' ? 'block' : 'hidden'} sm:block px-4 sm:px-0 py-4 sm:py-0 space-y-2.5 sm:max-h-[70vh] sm:overflow-y-auto`}
-        >
-          {loading && reports.length === 0 ? (
-            <p className="text-soft text-sm">Loading…</p>
           ) : reports.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-soft">No reports match these filters.</p>
-              <Link to="/report" className="text-brand-600 font-medium hover:underline mt-2 inline-block">
+            <div className="text-center py-16 px-6">
+              <p className="text-soft">No reports match these filters yet.</p>
+              <Link
+                to="/report"
+                className="text-brand-600 font-medium hover:underline mt-2 inline-block"
+              >
                 Be the first to report →
               </Link>
             </div>
           ) : (
-            reports.map((r) => <ReportCard key={r.id} report={r} />)
+            <div className="p-3 space-y-2.5">
+              {reports.map((r) => (
+                <ReportCard key={r.id} report={r} />
+              ))}
+            </div>
           )}
+        </aside>
+
+        {/* Map */}
+        <div
+          className={`${mobileView === 'map' ? 'block' : 'hidden'} md:block flex-1 relative h-[calc(100vh-8.5rem)] min-h-[24rem]`}
+        >
+          {geoStatus === 'denied' && (
+            <div className="absolute z-[500] top-3 left-1/2 -translate-x-1/2 rounded-full bg-surface border border-app shadow px-3 py-1.5 text-xs text-soft">
+              Showing Dubai — enable location to center on you
+            </div>
+          )}
+          <ReportsMap reports={reports} className="h-full" center={center} zoom={13} showLocate />
         </div>
       </div>
     </div>
