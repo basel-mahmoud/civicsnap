@@ -5,7 +5,11 @@ import { Layout } from '@/components/Layout'
 import { RequireAuth } from '@/components/RequireAuth'
 import { Landing } from '@/pages/Landing'
 import { SignIn } from '@/pages/SignIn'
+import { MapPage } from '@/pages/MapPage'
 import { ReportPage } from '@/pages/ReportPage'
+import { ReportDetail } from '@/pages/ReportDetail'
+import { MyReports } from '@/pages/MyReports'
+import { Admin } from '@/pages/Admin'
 import { Placeholder } from '@/pages/Placeholder'
 
 export default function App() {
@@ -16,7 +20,8 @@ export default function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route index element={<Landing />} />
-              <Route path="/map" element={<Placeholder title="Issue map" />} />
+              <Route path="/map" element={<MapPage />} />
+              <Route path="/report/:id" element={<ReportDetail />} />
               <Route
                 path="/report"
                 element={
@@ -25,10 +30,23 @@ export default function App() {
                   </RequireAuth>
                 }
               />
-              <Route path="/report/:id" element={<Placeholder title="Report detail" />} />
               <Route path="/signin" element={<SignIn />} />
-              <Route path="/me" element={<Placeholder title="My reports" />} />
-              <Route path="/admin" element={<Placeholder title="Admin dashboard" />} />
+              <Route
+                path="/me"
+                element={
+                  <RequireAuth>
+                    <MyReports />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <RequireAuth adminOnly>
+                    <Admin />
+                  </RequireAuth>
+                }
+              />
               <Route path="*" element={<Placeholder title="Page not found" />} />
             </Route>
           </Routes>
