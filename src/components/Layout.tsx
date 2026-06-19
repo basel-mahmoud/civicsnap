@@ -20,7 +20,7 @@ export function Layout() {
 
   return (
     <div className="min-h-full flex flex-col bg-app">
-      <header className="sticky top-0 z-[1000] border-b border-app bg-surface/80 backdrop-blur">
+      <header className="sticky top-0 z-[1000] border-b border-app glass">
         <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center gap-2 font-bold text-lg tracking-tight">
             <Logo />

@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local agent / editor design tooling (skills) — not part of the app
+.agents/
+.claude/
+.cursor/
+skills-lock.json
+
 # Environment secrets — never commit. .env.example documents the shape.
 .env
 .env.*

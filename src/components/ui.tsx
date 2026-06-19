@@ -5,17 +5,17 @@ type Size = 'sm' | 'md' | 'lg'
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 shadow-sm disabled:bg-brand-300',
+    'text-ink-950 font-semibold bg-[linear-gradient(110deg,#34d399,#2dd4bf_55%,#22d3ee)] bg-[length:200%_auto] hover:bg-right shadow-[0_10px_30px_-8px_rgba(45,212,191,0.6)] hover:shadow-[0_14px_40px_-8px_rgba(45,212,191,0.75)] active:scale-[0.98] transition-all disabled:opacity-60',
   secondary:
-    'bg-surface text-app border border-app hover:bg-muted2 disabled:opacity-50',
-  ghost: 'text-app hover:bg-muted2 disabled:opacity-50',
-  danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300',
+    'glass text-app border border-app hover:border-brand-400/60 hover:bg-muted2 active:scale-[0.98] transition-all disabled:opacity-50',
+  ghost: 'text-app hover:bg-muted2 disabled:opacity-50 transition-colors',
+  danger: 'bg-red-600 text-white hover:bg-red-700 active:scale-[0.98] transition-all disabled:bg-red-300',
 }
 
 const SIZES: Record<Size, string> = {
-  sm: 'h-8 px-3 text-sm rounded-lg gap-1.5',
-  md: 'h-10 px-4 text-sm rounded-xl gap-2',
-  lg: 'h-12 px-6 text-base rounded-xl gap-2',
+  sm: 'h-9 px-4 text-sm rounded-full gap-1.5',
+  md: 'h-11 px-5 text-sm rounded-full gap-2',
+  lg: 'h-13 px-7 text-base rounded-full gap-2',
 }
 
 export function Button({

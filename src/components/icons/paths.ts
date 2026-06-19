@@ -24,6 +24,16 @@ export type IconName =
   | 'map-pinned'
   | 'circle-alert'
   | 'list-checks'
+  | 'arrow-right'
+  | 'zap'
+  | 'shield-check'
+  | 'users'
+  | 'clock'
+  | 'trending-up'
+  | 'bell'
+  | 'activity'
+  | 'navigation'
+  | 'eye'
 
 export const ICON_INNER: Record<IconName, string> = {
   construction:
@@ -61,6 +71,19 @@ export const ICON_INNER: Record<IconName, string> = {
     '<circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>',
   'list-checks':
     '<path d="M13 5h8m-8 7h8m-8 7h8M3 17l2 2l4-4M3 7l2 2l4-4"/>',
+  'arrow-right': '<path d="M5 12h14m-7-7l7 7l-7 7"/>',
+  zap: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+  'shield-check':
+    '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/>',
+  users:
+    '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 3.128a4 4 0 0 1 0 7.744M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  'trending-up': '<path d="M16 7h6v6"/><path d="m22 7l-8.5 8.5l-5-5L2 17"/>',
+  bell: '<path d="M10.268 21a2 2 0 0 0 3.464 0m-10.47-5.674A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
+  activity:
+    '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+  navigation: '<path d="m3 11l19-9l-9 19l-2-8z"/>',
+  eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696a10.75 10.75 0 0 1 19.876 0a1 1 0 0 1 0 .696a10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
 }
 
 /** Full standalone SVG markup string — for Leaflet divIcons (non-React contexts). */
