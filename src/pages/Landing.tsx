@@ -1,13 +1,12 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useInView, animate } from 'motion/react'
+import { motion, useInView, animate } from 'motion/react'
 import { CATEGORY_LIST } from '@/lib/categories'
-import { Button } from '@/components/ui'
 import { Icon, type IconName } from '@/components/icons/Icon'
+import { Intro } from '@/components/Intro'
 
-const HeroLiveMap = lazy(() =>
-  import('@/components/map/HeroLiveMap').then((m) => ({ default: m.HeroLiveMap })),
-)
+// Three.js is heavy; lazy-load so it never blocks first paint.
+const Globe3D = lazy(() => import('@/components/three/Globe3D'))
 
 const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1]
 
@@ -80,55 +79,86 @@ const FEATURES: { icon: IconName; title: string; body: string }[] = [
 export function Landing() {
   return (
     <div className="bg-app">
-      {/* document header strip */}
-      <div className="border-b-2 border-app">
-        <div className="mx-auto max-w-7xl px-4 py-1.5 flex items-center justify-between">
-          <span className="telemetry text-soft">CIVICSNAP ® // CIVIC INFRASTRUCTURE REGISTRY</span>
-          <span className="telemetry text-soft hidden sm:block">REV 2.6 / DUBAI / AE</span>
+      <Intro />
+
+      {/* HERO — command console (deliberate dark color block) */}
+      <section className="relative bg-[#0a0a0a] text-[#eaeaea] overflow-hidden">
+        {/* document header strip */}
+        <div className="relative z-10 border-b border-[#262626]">
+          <div className="mx-auto max-w-7xl px-4 sm:px-8 py-1.5 flex items-center justify-between">
+            <span className="telemetry text-[#8a877e]">CIVICSNAP ® // CIVIC INFRASTRUCTURE REGISTRY</span>
+            <span className="telemetry text-[#8a877e] hidden sm:block">REV 2.6 / DUBAI / AE</span>
+          </div>
         </div>
-      </div>
 
-      {/* HERO */}
-      <section className="relative bg-grid">
-        <div className="mx-auto max-w-7xl grid lg:grid-cols-[1.05fr_0.95fr]">
-          {/* left */}
-          <div className="px-4 sm:px-8 py-12 lg:py-16">
-            <p className="telemetry text-accent">// AI-VERIFIED CIVIC REPORTING</p>
-            <h1 className="mt-6 font-display uppercase leading-[0.86] tracking-[-0.04em] text-app text-[clamp(3.5rem,12vw,9rem)]">
-              Snap.
-              <br />
-              Map.
-              <br />
-              <span className="text-accent">Fixed.</span>
-            </h1>
-            <p className="mt-7 max-w-md text-base text-soft leading-relaxed">
-              CivicSnap turns one photo into a tracked, AI-categorized, mapped civic
-              report. From pothole to resolved, kept on the public record.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/report">
-                <Button size="lg">
-                  Report an issue <Icon name="arrow-right" size={16} />
-                </Button>
-              </Link>
-              <Link to="/map">
-                <Button size="lg" variant="secondary">
-                  View map
-                </Button>
-              </Link>
-            </div>
-          </div>
+        {/* interactive 3D globe */}
+        <div className="absolute inset-0 lg:left-[40%] z-0">
+          <Suspense fallback={null}>
+            <Globe3D />
+          </Suspense>
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(78% 78% at 70% 50%, transparent 58%, rgba(10,10,10,0.9) 100%)' }}
+          />
+        </div>
 
-          {/* right: real map */}
-          <div className="px-4 sm:px-8 py-12 lg:py-16 flex items-center lg:border-l-2 border-app border-t-2 lg:border-t-0">
-            <div className="w-full">
-              <Suspense
-                fallback={<div className="aspect-[4/3.1] border-2 border-app bg-muted2 animate-pulse" />}
-              >
-                <HeroLiveMap />
-              </Suspense>
-            </div>
-          </div>
+        {/* scanlines */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-[1] opacity-25"
+          style={{
+            background:
+              'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.035) 2px, rgba(255,255,255,0.035) 4px)',
+          }}
+        />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 min-h-[82vh] flex flex-col justify-center py-16 pointer-events-none">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="telemetry text-accent"
+          >
+            // AI-VERIFIED CIVIC REPORTING
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.18, ease: EASE_OUT }}
+            className="mt-6 font-display uppercase leading-[0.83] tracking-[-0.04em] text-[clamp(3.5rem,12vw,9.5rem)]"
+          >
+            Snap.
+            <br />
+            Map.
+            <br />
+            <span className="text-accent">Fixed.</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.32 }}
+            className="mt-7 max-w-md text-base text-[#9a978d] leading-relaxed"
+          >
+            CivicSnap turns one photo into a tracked, AI-categorized, mapped civic
+            report. From pothole to resolved, kept on the public record.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.44 }}
+            className="mt-9 flex flex-wrap gap-3 pointer-events-auto"
+          >
+            <Link to="/report">
+              <button className="inline-flex items-center gap-2 h-14 px-8 bg-[#eaeaea] text-[#0a0a0a] font-mono font-semibold uppercase tracking-wide text-sm border-2 border-[#eaeaea] hover:bg-[#e61919] hover:border-[#e61919] hover:text-white active:translate-y-[2px] transition-colors">
+                Report an issue <Icon name="arrow-right" size={16} />
+              </button>
+            </Link>
+            <Link to="/map">
+              <button className="inline-flex items-center gap-2 h-14 px-8 bg-transparent text-[#eaeaea] font-mono font-semibold uppercase tracking-wide text-sm border-2 border-[#3a3a3a] hover:border-[#eaeaea] active:translate-y-[2px] transition-colors">
+                View map
+              </button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
