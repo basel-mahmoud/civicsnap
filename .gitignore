@@ -16,6 +16,9 @@ dist-ssr
 .env
 .env.*
 !.env.example
+# .env.production holds ONLY public, browser-safe keys (Supabase URL + anon key,
+# protected by RLS) so the production build is reproducible. Safe to commit.
+!.env.production
 
 # Editor directories and files
 .vscode/*
