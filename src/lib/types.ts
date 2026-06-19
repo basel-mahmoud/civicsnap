@@ -18,7 +18,7 @@ export interface Report {
   lat: number
   lng: number
   address: string | null
-  photo_url: string | null
+  photo_path: string | null
   ai_summary: string | null
   ai_confidence: number | null
   upvote_count: number
