@@ -18,5 +18,16 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Advisory perf hint; our "set loading before fetch" effects are intentional.
+      'react-hooks/set-state-in-effect': 'warn',
+      // Dev-only Fast Refresh hint; safe to ship co-located helpers.
+      'react-refresh/only-export-components': 'warn',
+    },
+  },
+  {
+    // Tests run under Vitest globals.
+    files: ['**/*.test.{ts,tsx}'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
 ])

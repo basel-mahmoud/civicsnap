@@ -42,7 +42,7 @@ export function LocationPicker({
   const [geoError, setGeoError] = useState<string | null>(null)
   const center = value ?? DEFAULT_CENTER
 
-  function useMyLocation() {
+  function requestLocation() {
     setGeoError(null)
     if (!('geolocation' in navigator)) {
       setGeoError('Geolocation is not available in this browser.')
@@ -68,7 +68,7 @@ export function LocationPicker({
 
   // Try to locate automatically the first time we have no value.
   useEffect(() => {
-    if (!value) useMyLocation()
+    if (!value) requestLocation()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -80,7 +80,7 @@ export function LocationPicker({
             ? 'Drag the pin or tap the map to fine-tune.'
             : 'Set the location of the issue.'}
         </span>
-        <Button type="button" size="sm" variant="secondary" onClick={useMyLocation} loading={locating}>
+        <Button type="button" size="sm" variant="secondary" onClick={requestLocation} loading={locating}>
           <Icon name="map-pin" size={14} /> My location
         </Button>
       </div>

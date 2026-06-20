@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { withRetry } from './retry'
 import type {
   AIClassification,
   Comment,
@@ -69,17 +70,29 @@ export interface NewReportInput {
   ai_confidence?: number | null
 }
 
+/**
+ * Idempotent report creation. `idempotencyKey` must be stable across retries of
+ * the same logical submission: the unique (reporter_id, idempotency_key) index
+ * means a retried call upserts the same row instead of creating a duplicate.
+ * Wrapped in exponential backoff — safe precisely because the write is idempotent.
+ */
 export async function createReport(
   reporterId: string,
   input: NewReportInput,
+  idempotencyKey: string,
 ): Promise<Report> {
-  const { data, error } = await supabase
-    .from('reports')
-    .insert({ ...input, reporter_id: reporterId })
-    .select(REPORT_COLUMNS)
-    .single()
-  if (error) throw error
-  return data as Report
+  return withRetry(async () => {
+    const { data, error } = await supabase
+      .from('reports')
+      .upsert(
+        { ...input, reporter_id: reporterId, idempotency_key: idempotencyKey },
+        { onConflict: 'reporter_id,idempotency_key', ignoreDuplicates: false },
+      )
+      .select(REPORT_COLUMNS)
+      .single()
+    if (error) throw error
+    return data as Report
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -102,12 +115,18 @@ export async function classifyPhoto(
   imageBase64: string,
   mediaType: string,
 ): Promise<AIClassification> {
-  const { data, error } = await supabase.functions.invoke('classify-photo', {
-    body: { image_base64: imageBase64, media_type: mediaType },
-  })
-  if (error) throw new Error(error.message || 'AI classification failed')
-  if (data?.error) throw new Error(data.error)
-  return data as AIClassification
+  // Read-only classification — safe to retry on transient failure.
+  return withRetry(
+    async () => {
+      const { data, error } = await supabase.functions.invoke('classify-photo', {
+        body: { image_base64: imageBase64, media_type: mediaType },
+      })
+      if (error) throw new Error(error.message || 'AI classification failed')
+      if (data?.error) throw new Error(data.error)
+      return data as AIClassification
+    },
+    { retries: 2 },
+  )
 }
 
 // ---------------------------------------------------------------------------

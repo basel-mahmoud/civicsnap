@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
@@ -61,7 +61,7 @@ function Pin({ lat, lng, lead }: { lat: number; lng: number; lead?: boolean }) {
     const normal = pos.clone().normalize()
     return new THREE.Quaternion().setFromUnitVectors(up, normal)
   }, [pos])
-  const phase = useMemo(() => Math.random() * Math.PI * 2, [])
+  const [phase] = useState(() => Math.random() * Math.PI * 2)
 
   useFrame(({ clock }) => {
     if (!ringRef.current) return

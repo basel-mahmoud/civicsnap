@@ -17,6 +17,8 @@ export function ReportPage() {
   const { session } = useAuth()
   const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement>(null)
+  // Stable across retries/double-submits of the same report, so creation is idempotent.
+  const idemKeyRef = useRef<string | null>(null)
 
   const [photo, setPhoto] = useState<ProcessedImage | null>(null)
   const [photoError, setPhotoError] = useState<string | null>(null)
@@ -80,24 +82,31 @@ export function ReportPage() {
     if (!session || !photo || !location) return
     setSubmitError(null)
     setSubmitting(true)
+    // Reuse the same key for any retry of this submission so we never duplicate.
+    const idempotencyKey = (idemKeyRef.current ??= crypto.randomUUID())
     try {
       const userId = session.user.id
       const [photo_path, address] = await Promise.all([
         uploadReportPhoto(userId, photo.blob),
         reverseGeocode(location.lat, location.lng),
       ])
-      const report = await createReport(userId, {
-        title: title.trim() || 'Reported issue',
-        description: description.trim(),
-        category,
-        severity,
-        lat: location.lat,
-        lng: location.lng,
-        address,
-        photo_path,
-        ai_summary: ai?.description ?? null,
-        ai_confidence: ai?.confidence ?? null,
-      })
+      const report = await createReport(
+        userId,
+        {
+          title: title.trim() || 'Reported issue',
+          description: description.trim(),
+          category,
+          severity,
+          lat: location.lat,
+          lng: location.lng,
+          address,
+          photo_path,
+          ai_summary: ai?.description ?? null,
+          ai_confidence: ai?.confidence ?? null,
+        },
+        idempotencyKey,
+      )
+      idemKeyRef.current = null // fresh key for the next distinct report
       navigate(`/report/${report.id}`)
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Could not submit your report.')
