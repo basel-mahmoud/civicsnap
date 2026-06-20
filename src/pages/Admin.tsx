@@ -114,6 +114,7 @@ export function Admin() {
                 </div>
               </div>
               <select
+                aria-label={`Change status for "${r.title}"`}
                 value={STATUS_FLOW.includes(r.status) ? r.status : ''}
                 disabled={savingId === r.id}
                 onChange={(e) => setStatus(r.id, e.target.value as ReportStatus)}

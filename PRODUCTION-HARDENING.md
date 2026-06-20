@@ -34,7 +34,7 @@ Status of the production-readiness program. Legend: **✅ Done** · **🟡 Parti
 | Concurrency / race prevention | ✅ | Idempotent upsert; DB-side `upvote_count` via trigger (atomic); unique constraints; backoff retries serialization failures (`40001`). |
 | Caching strategy / invalidation | 🟡 | Immutable hashed assets + CDN; map tiles cached by browser. **Next:** SWR/react-query for report reads with realtime invalidation. |
 | RTO / RPO + Disaster recovery | 🟡 | Targets + DR runbook below (RPO ≤ 24h via Supabase PITR/backups; RTO ≤ 1h redeploy). |
-| Accessibility (WCAG) | 🟡 | Skip-to-content link, `<main>` landmark, semantic HTML, focus-visible rings, reduced-motion honored, alt text, labelled inputs. **Next:** full axe audit + contrast pass. |
+| Accessibility (WCAG) | 🟡 | Skip-to-content link, `<main>` landmark, semantic HTML, focus-visible rings, reduced-motion honored, alt text, labelled inputs, `aria-label`s on icon-only controls + unlabeled selects, `aria-pressed` on the upvote toggle. **Next:** live axe run + flatten any nested-interactive `<a><button>` pairs. |
 | ADRs | ✅ | `docs/adr/0001..0003-*.md`. |
 | Architecture diagram | ✅ | Mermaid below. |
 | API contract | ✅ | `docs/openapi.yaml` (edge fn) + the data-access contract below. |

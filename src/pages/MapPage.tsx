@@ -63,6 +63,7 @@ export function MapPage() {
       <div className="border-b border-app bg-surface">
         <div className="mx-auto max-w-7xl px-4 py-3 flex flex-wrap items-center gap-2">
           <select
+            aria-label="Filter reports by category"
             value={category}
             onChange={(e) => setCategory(e.target.value as CategoryId | 'all')}
             className="h-9 rounded-lg border border-app bg-app text-app text-sm px-2"

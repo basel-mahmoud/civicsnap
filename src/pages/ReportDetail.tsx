@@ -173,6 +173,8 @@ export function ReportDetail() {
         </div>
         <button
           onClick={toggleUpvote}
+          aria-pressed={upvoted}
+          aria-label={`${upvoted ? 'Remove upvote' : 'Upvote'} — ${report.upvote_count} so far`}
           className={`flex items-center gap-2 rounded-xl border px-4 h-11 font-semibold transition ${
             upvoted
               ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300'
