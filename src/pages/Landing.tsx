@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView, animate } from 'motion/react'
+import { useInView, animate } from 'motion/react'
 import { CATEGORY_LIST } from '@/lib/categories'
 import { Icon, type IconName } from '@/components/icons/Icon'
 import { Intro } from '@/components/Intro'
@@ -81,24 +81,24 @@ export function Landing() {
     <div className="bg-app">
       <Intro />
 
-      {/* HERO — command console (deliberate dark color block) */}
-      <section className="relative bg-[#0a0a0a] text-[#eaeaea] overflow-hidden">
+      {/* HERO — command console (deliberate navy color block) */}
+      <section className="relative bg-[#0c1322] text-[#e8e2d4] overflow-hidden">
         {/* document header strip */}
-        <div className="relative z-10 border-b border-[#262626]">
+        <div className="relative z-10 border-b border-[#2a3650]">
           <div className="mx-auto max-w-7xl px-4 sm:px-8 py-1.5 flex items-center justify-between">
-            <span className="telemetry text-[#8a877e]">CIVICSNAP ® // CIVIC INFRASTRUCTURE REGISTRY</span>
-            <span className="telemetry text-[#8a877e] hidden sm:block">REV 2.6 / DUBAI / AE</span>
+            <span className="telemetry text-[#8a93a8]">CIVICSNAP ® // CIVIC INFRASTRUCTURE REGISTRY</span>
+            <span className="telemetry text-[#8a93a8] hidden sm:block">REV 2.6 / DUBAI / AE</span>
           </div>
         </div>
 
         {/* interactive 3D globe */}
-        <div className="absolute inset-0 lg:left-[40%] z-0">
+        <div className="absolute inset-0 lg:left-[42%] z-0">
           <Suspense fallback={null}>
             <Globe3D />
           </Suspense>
           <div
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(78% 78% at 70% 50%, transparent 58%, rgba(10,10,10,0.9) 100%)' }}
+            style={{ background: 'radial-gradient(78% 78% at 70% 50%, transparent 60%, rgba(12,19,34,0.92) 100%)' }}
           />
         </div>
 
@@ -112,53 +112,31 @@ export function Landing() {
           }}
         />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 min-h-[82vh] flex flex-col justify-center py-16 pointer-events-none">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="telemetry text-accent"
-          >
-            // AI-VERIFIED CIVIC REPORTING
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.18, ease: EASE_OUT }}
-            className="mt-6 font-display uppercase leading-[0.83] tracking-[-0.04em] text-[clamp(3.5rem,12vw,9.5rem)]"
-          >
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 min-h-[80vh] flex flex-col justify-center py-16 pointer-events-none hero-rise">
+          <p className="telemetry text-[#e0a23a]">// AI-VERIFIED CIVIC REPORTING</p>
+          <h1 className="mt-5 font-display uppercase leading-[0.85] tracking-[-0.035em] text-[clamp(2.75rem,8vw,6rem)]">
             Snap.
             <br />
             Map.
             <br />
-            <span className="text-accent">Fixed.</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.32 }}
-            className="mt-7 max-w-md text-base text-[#9a978d] leading-relaxed"
-          >
+            <span className="text-[#e0a23a]">Fixed.</span>
+          </h1>
+          <p className="mt-6 max-w-md text-[15px] text-[#9aa3b8] leading-relaxed">
             CivicSnap turns one photo into a tracked, AI-categorized, mapped civic
             report. From pothole to resolved, kept on the public record.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.44 }}
-            className="mt-9 flex flex-wrap gap-3 pointer-events-auto"
-          >
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3 pointer-events-auto">
             <Link to="/report">
-              <button className="inline-flex items-center gap-2 h-14 px-8 bg-[#eaeaea] text-[#0a0a0a] font-mono font-semibold uppercase tracking-wide text-sm border-2 border-[#eaeaea] hover:bg-[#e61919] hover:border-[#e61919] hover:text-white active:translate-y-[2px] transition-colors">
-                Report an issue <Icon name="arrow-right" size={16} />
+              <button className="inline-flex items-center gap-2 h-12 px-6 bg-[#e0a23a] text-[#0c1322] font-mono font-semibold uppercase tracking-wide text-[13px] border-2 border-[#e0a23a] hover:bg-[#e8e2d4] hover:border-[#e8e2d4] active:translate-y-[2px] transition-colors">
+                Report an issue <Icon name="arrow-right" size={15} />
               </button>
             </Link>
             <Link to="/map">
-              <button className="inline-flex items-center gap-2 h-14 px-8 bg-transparent text-[#eaeaea] font-mono font-semibold uppercase tracking-wide text-sm border-2 border-[#3a3a3a] hover:border-[#eaeaea] active:translate-y-[2px] transition-colors">
+              <button className="inline-flex items-center gap-2 h-12 px-6 bg-transparent text-[#e8e2d4] font-mono font-semibold uppercase tracking-wide text-[13px] border-2 border-[#2a3650] hover:border-[#e8e2d4] active:translate-y-[2px] transition-colors">
                 View map
               </button>
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -171,7 +149,7 @@ export function Landing() {
           { n: 100, s: '%', l: 'PUBLIC RECORD' },
         ].map((stat) => (
           <div key={stat.l} className="bg-app px-5 py-7">
-            <p className="font-display text-4xl sm:text-5xl text-app">
+            <p className="font-display text-3xl sm:text-4xl text-app">
               <CountUp to={stat.n} suffix={stat.s} />
             </p>
             <p className="telemetry text-soft mt-2">{stat.l}</p>
@@ -182,7 +160,7 @@ export function Landing() {
       {/* PROTOCOL */}
       <section className="mx-auto max-w-7xl px-4 sm:px-8 py-16">
         <div className="flex items-end justify-between gap-4 mb-8">
-          <h2 className="font-display text-3xl sm:text-5xl text-app">Operating protocol</h2>
+          <h2 className="font-display text-2xl sm:text-4xl text-app">Operating protocol</h2>
           <span className="telemetry text-soft hidden sm:block">/ 04 STEPS</span>
         </div>
         <div className="rule-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-2 border-app">
@@ -202,7 +180,7 @@ export function Landing() {
       {/* CATEGORY REGISTRY */}
       <section className="border-y-2 border-app">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 py-6 flex items-center justify-between">
-          <h2 className="font-display text-2xl sm:text-3xl text-app">Category registry</h2>
+          <h2 className="font-display text-xl sm:text-2xl text-app">Category registry</h2>
           <span className="telemetry text-soft">{CATEGORY_LIST.length} CLASSES</span>
         </div>
         <div className="rule-grid grid-cols-2 sm:grid-cols-4 border-t-2 border-app">
@@ -221,7 +199,7 @@ export function Landing() {
       {/* STATUS PIPELINE */}
       <section className="mx-auto max-w-7xl px-4 sm:px-8 py-16">
         <div className="flex items-end justify-between gap-4 mb-8">
-          <h2 className="font-display text-3xl sm:text-5xl text-app">
+          <h2 className="font-display text-2xl sm:text-4xl text-app">
             Transparent
             <br />
             pipeline
@@ -252,7 +230,7 @@ export function Landing() {
       <section className="bg-[var(--text)] text-[var(--bg)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 py-20 sm:py-28">
           <p className="telemetry" style={{ color: 'var(--accent)' }}>// FILE YOUR FIRST REPORT</p>
-          <h2 className="mt-5 font-display uppercase leading-[0.88] tracking-[-0.04em] text-[clamp(2.75rem,9vw,7rem)]">
+          <h2 className="mt-5 font-display uppercase leading-[0.88] tracking-[-0.04em] text-[clamp(2.25rem,6vw,4.5rem)]">
             Put it on
             <br />
             the <span style={{ color: 'var(--accent)' }}>record.</span>

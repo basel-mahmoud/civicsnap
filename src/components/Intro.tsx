@@ -50,7 +50,7 @@ export function Intro() {
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[2000] bg-[#0a0a0a] text-[#eaeaea] flex items-center justify-center cursor-pointer"
+          className="fixed inset-0 z-[2000] bg-[#0c1322] text-[#e8e2d4] flex items-center justify-center cursor-pointer"
           onClick={finish}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
@@ -64,15 +64,15 @@ export function Intro() {
             }}
           />
           <div className="w-[min(90vw,520px)] font-mono text-[13px] leading-7">
-            <p className="text-[#e61919] mb-4 tracking-[0.2em] text-xs">CIVICSNAP ® // BOOT</p>
+            <p className="text-[#e0a23a] mb-4 tracking-[0.2em] text-xs">CIVICSNAP ® // BOOT</p>
             {LINES.slice(0, count).map((l) => (
               <p key={l} className="whitespace-pre">
                 {l}
               </p>
             ))}
-            <span className="inline-block w-2.5 h-4 bg-[#e61919] align-middle animate-pulse" />
+            <span className="inline-block w-2.5 h-4 bg-[#e0a23a] align-middle animate-pulse" />
           </div>
-          <p className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.2em] text-[#8a877e] uppercase">
+          <p className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.2em] text-[#8a93a8] uppercase">
             Click to skip
           </p>
         </motion.div>

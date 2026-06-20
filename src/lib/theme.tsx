@@ -18,7 +18,7 @@ const ThemeContext = createContext<ThemeState | undefined>(undefined)
 function initialTheme(): Theme {
   const stored = localStorage.getItem('civicsnap-theme')
   if (stored === 'light' || stored === 'dark') return stored
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'dark' // deep-navy is the default substrate
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 
 const R = 1.6
@@ -47,7 +48,7 @@ function DottedGlobe() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.027} color="#cbc8be" transparent opacity={0.92} sizeAttenuation />
+      <pointsMaterial size={0.027} color="#d8cdb0" transparent opacity={0.92} sizeAttenuation />
     </points>
   )
 }
@@ -72,7 +73,7 @@ function Pin({ lat, lng, lead }: { lat: number; lng: number; lead?: boolean }) {
     mat.opacity = (1 - tt) * 0.8
   })
 
-  const color = '#e61919'
+  const color = '#e0a23a'
   const beam = lead ? 0.5 : 0.32
 
   return (
@@ -97,23 +98,12 @@ function Pin({ lat, lng, lead }: { lat: number; lng: number; lead?: boolean }) {
 }
 
 function Scene() {
-  const group = useRef<THREE.Group>(null)
-  const { pointer } = useThree()
-
-  useFrame((_, delta) => {
-    if (!group.current) return
-    group.current.rotation.y += delta * 0.12
-    // subtle parallax toward the cursor
-    const targetX = pointer.y * 0.25
-    group.current.rotation.x += (targetX - group.current.rotation.x) * 0.05
-  })
-
   return (
-    <group ref={group} rotation={[0.35, 0, 0.1]}>
+    <group rotation={[0.35, 0, 0.1]}>
       {/* faint survey shell */}
       <mesh>
         <icosahedronGeometry args={[R * 0.995, 6]} />
-        <meshBasicMaterial color="#5f5d56" wireframe transparent opacity={0.08} />
+        <meshBasicMaterial color="#8a93a8" wireframe transparent opacity={0.1} />
       </mesh>
       <DottedGlobe />
       {PINS.map((p, i) => (
@@ -132,6 +122,16 @@ export default function Globe3D() {
       style={{ width: '100%', height: '100%' }}
     >
       <Scene />
+      {/* grab to spin; auto-rotates when idle */}
+      <OrbitControls
+        enableZoom={false}
+        enablePan={false}
+        autoRotate
+        autoRotateSpeed={0.5}
+        enableDamping
+        dampingFactor={0.08}
+        rotateSpeed={0.5}
+      />
     </Canvas>
   )
 }
