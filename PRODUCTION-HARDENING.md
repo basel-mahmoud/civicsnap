@@ -11,7 +11,7 @@ Status of the production-readiness program. Legend: **✅ Done** · **🟡 Parti
 | Authentication | ✅ | Supabase Auth (email/password), JWT sessions. |
 | Authorization / roles / permissions | ✅ | `profiles.role` (`resident`/`admin`); RLS everywhere; `is_admin()` `SECURITY DEFINER`; status changes admin-only (enforced in trigger + RLS). |
 | Session management / token expiry | ☁️✅ | Supabase short-lived access token + refresh; client auto-refresh, sign-out revokes. |
-| Secrets management | ☁️✅ | `ANTHROPIC_API_KEY` only in the edge-function secret store; only public anon key in the client (`.env.production`), protected by RLS. |
+| Secrets management | ☁️✅ | `GEMINI_API_KEY` only in the edge-function secret store; only public anon key in the client (`.env.production`), protected by RLS. |
 | HTTPS / TLS / encryption | ☁️ | TLS enforced by Vercel + Supabase; encryption at rest by Supabase (AES-256). `upgrade-insecure-requests` + HSTS set. |
 | Rate limiting / abuse prevention | 🟡 | Per-user token-bucket in the `classify-photo` edge function. **Next:** durable (DB/Redis) limiter for write endpoints. |
 | Dependency scanning / patching | ✅ | CI `security` job runs `npm audit --audit-level=high` (blocks on high/critical). Currently 0 vulnerabilities. |
@@ -50,13 +50,13 @@ flowchart LR
   V -->|realtime wss| RT[Supabase Realtime]
   V -->|signed upload| ST[Supabase Storage<br/>report-photos]
   V -->|invoke verify_jwt| EF[Edge Function<br/>classify-photo]
-  EF -->|x-api-key secret| AN[Anthropic Claude<br/>vision]
+  EF -->|x-api-key secret| AN[Google Gemini<br/>vision]
   V -->|tiles| C[CARTO basemaps]
   V -->|reverse geocode| N[OSM Nominatim]
 ```
 
 - **Trust boundary:** the browser only ever holds the public anon key; every read/write
-  is mediated by Row Level Security. The Anthropic key lives solely in the edge function.
+  is mediated by Row Level Security. The Google Gemini key lives solely in the edge function.
 - **Mutations are idempotent** so client retries and double-submits cannot duplicate data.
 
 ## Data policy (PII / retention / compliance posture)
@@ -92,6 +92,6 @@ flowchart LR
 
 1. **Supabase + RLS over a custom backend** — push authz into the database; no bespoke API tier to secure.
 2. **Supabase Auth over Clerk (vs QueueUp)** — fully self-serviceable, fewer moving parts.
-3. **Server-side AI in an edge function** — keep the Anthropic key off the client; constrain output via tool-use + allow-list.
+3. **Server-side AI in an edge function** — keep the Google Gemini key off the client; constrain output via tool-use + allow-list.
 4. **Idempotency via per-reporter key + upsert** — simplest correct dedupe; enables safe retries/backoff.
 5. **Leaflet + CARTO/OSM over Mapbox** — no API key, no per-load billing.

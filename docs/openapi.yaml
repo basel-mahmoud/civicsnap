@@ -11,7 +11,7 @@ servers:
 paths:
   /classify-photo:
     post:
-      summary: Classify a civic-issue photo with Claude vision
+      summary: Classify a civic-issue photo with Gemini vision
       security:
         - bearerAuth: []
       requestBody:

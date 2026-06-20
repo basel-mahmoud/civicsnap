@@ -63,7 +63,7 @@ function StatusDemo() {
 /* ----------------------------------------------------------------------- data */
 const STEPS: { icon: IconName; title: string; body: string }[] = [
   { icon: 'camera', title: 'CAPTURE', body: 'Photograph the issue from your phone. Pothole, dead street light, dumped trash.' },
-  { icon: 'sparkles', title: 'CLASSIFY', body: 'Claude vision reads the image, assigns category and severity, writes the title.' },
+  { icon: 'sparkles', title: 'CLASSIFY', body: 'AI vision reads the image, assigns category and severity, writes the title.' },
   { icon: 'navigation', title: 'LOCATE', body: 'Geolocation drops a live pin on the shared public map for the whole block.' },
   { icon: 'shield-check', title: 'RESOLVE', body: 'Tracked through Reported, Acknowledged, In progress, Fixed. On the record.' },
 ]
