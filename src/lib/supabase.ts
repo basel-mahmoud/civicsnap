@@ -12,11 +12,22 @@ if (!url || !anonKey) {
   )
 }
 
+// Auth is delegated to Clerk (Supabase Third-Party Auth). Every request carries
+// the current Clerk session token (which includes `sub` + `role: authenticated`);
+// RLS reads `auth.jwt()->>'sub'`. When signed out the token is null, so public
+// reads still work as anonymous.
 export const supabase = createClient(url ?? 'http://localhost', anonKey ?? 'public-anon-key', {
   auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false,
+  },
+  accessToken: async () => {
+    try {
+      return (await window.Clerk?.session?.getToken()) ?? null
+    } catch {
+      return null
+    }
   },
 })
 
