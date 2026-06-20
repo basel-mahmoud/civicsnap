@@ -17,27 +17,27 @@ Status of the production-readiness program. Legend: **✅ Done** · **🟡 Parti
 | Dependency scanning / patching | ✅ | CI `security` job runs `npm audit --audit-level=high` (blocks on high/critical). Currently 0 vulnerabilities. |
 | Multi-tenancy / data isolation | ✅ | RLS on every table; owner/admin scoping; storage policies scope uploads to `/<uid>/`. |
 | PII handling | 🟡 | Minimal PII (email, display name, photo, coarse geo). Photos re-encoded client-side to strip EXIF/GPS. See **Data Policy** below. |
-| Data retention / deletion | 🟡 | Cascade deletes on user removal; policy documented below. **Next:** self-serve account/report deletion UI + scheduled purge job. |
+| Data retention / deletion | ✅ | `purge_expired()` (`0005_retention.sql`) removes rejected reports >90d; schedule via pg_cron (one-liner in the migration). Cascade deletes on user removal. **Next:** self-serve deletion UI. |
 | Regulatory compliance | 🟡 | GDPR-style posture documented (lawful basis, data-subject rights, minimization). Not formally certified. |
 | Audit trails / tamper-evident logging | ✅ | `status_events` is an append-only audit log (no UPDATE/DELETE RLS policies) written by `SECURITY DEFINER` triggers; every status change recorded with actor + timestamp. |
 | Security headers | ✅ | CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, COOP in `vercel.json`. |
 | Unit tests | ✅ | Vitest (`src/lib/__tests__`): retry/backoff + domain invariants. |
-| Integration tests | 📝 | RLS policy tests against a Supabase test branch. |
-| End-to-end tests | 📝 | Playwright smoke (auth → report → map). |
-| Regression tests | 🟡 | Unit suite + typecheck + build gate every PR; grows with each bug fix. |
-| Load / stress testing | 📝 | k6 script against read endpoints; documented thresholds. |
-| Chaos / resilience testing | 📝 | Fault injection on edge function (latency/5xx) to validate retry/backoff. |
+| Integration tests | ✅ | `src/lib/__tests__/integration.test.ts` hits the live REST API: asserts anon can read reports but **cannot** insert (RLS). Self-skips without env. |
+| End-to-end tests | ✅ | Playwright (`e2e/smoke.spec.ts`): landing, map, 404; runs against the prod build in CI. |
+| Regression tests | ✅ | Unit + integration + e2e + typecheck + build gate every PR; grows with each bug fix. |
+| Load / stress testing | ✅ | `load/k6-read.js` (ramped, p95<500ms / <1% error thresholds). |
+| Chaos / resilience testing | ✅ | `circuit-breaker.test.ts` injects failures to verify open → fail-fast → half-open recovery. |
 | CI / discovery / enforcement | ✅ | `.github/workflows/ci.yml`: lint, typecheck, build, tests, dependency audit on every push/PR. |
 | Code review process / standards | ✅ | ESLint + strict TS + Vitest gate; conventional, reviewable commits; this doc as the bar. |
 | Error handling / graceful degradation | ✅ | AI failure → manual entry; geolocation denied → manual pin + Dubai fallback; missing env surfaced; per-call try/catch with user-facing messages. |
-| Circuit breakers / fallback | 🟡 | Fallbacks exist (AI, geo, tiles). **Next:** explicit breaker around the AI edge function. |
+| Circuit breakers / fallback | ✅ | `src/lib/circuit-breaker.ts` wraps the AI call (opens after 4 fails, 20s cooldown, half-open trial) → fails fast to manual entry. Plus geo/tiles fallbacks. |
 | Concurrency / race prevention | ✅ | Idempotent upsert; DB-side `upvote_count` via trigger (atomic); unique constraints; backoff retries serialization failures (`40001`). |
 | Caching strategy / invalidation | 🟡 | Immutable hashed assets + CDN; map tiles cached by browser. **Next:** SWR/react-query for report reads with realtime invalidation. |
 | RTO / RPO + Disaster recovery | 🟡 | Targets + DR runbook below (RPO ≤ 24h via Supabase PITR/backups; RTO ≤ 1h redeploy). |
-| Accessibility (WCAG) | 🟡 | Semantic HTML, focus-visible rings, reduced-motion honored, alt text, labelled inputs. **Next:** full axe audit + contrast pass. |
-| ADRs | 🟡 | Summarized below; **Next:** split into `docs/adr/NNNN-*.md`. |
+| Accessibility (WCAG) | 🟡 | Skip-to-content link, `<main>` landmark, semantic HTML, focus-visible rings, reduced-motion honored, alt text, labelled inputs. **Next:** full axe audit + contrast pass. |
+| ADRs | ✅ | `docs/adr/0001..0003-*.md`. |
 | Architecture diagram | ✅ | Mermaid below. |
-| API contract | ✅ | Edge-function + data-access contract below; **Next:** generated OpenAPI for edge functions. |
+| API contract | ✅ | `docs/openapi.yaml` (edge fn) + the data-access contract below. |
 
 ---
 

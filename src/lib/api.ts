@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import { withRetry } from './retry'
+import { CircuitBreaker } from './circuit-breaker'
 import type {
   AIClassification,
   Comment,
@@ -111,21 +112,27 @@ export async function uploadReportPhoto(
   return path
 }
 
+// Trips after repeated AI failures so the UI fails fast to manual entry instead
+// of every user waiting through retries against a down service.
+const aiBreaker = new CircuitBreaker('AI classification', 4, 20_000)
+
 export async function classifyPhoto(
   imageBase64: string,
   mediaType: string,
 ): Promise<AIClassification> {
-  // Read-only classification — safe to retry on transient failure.
-  return withRetry(
-    async () => {
-      const { data, error } = await supabase.functions.invoke('classify-photo', {
-        body: { image_base64: imageBase64, media_type: mediaType },
-      })
-      if (error) throw new Error(error.message || 'AI classification failed')
-      if (data?.error) throw new Error(data.error)
-      return data as AIClassification
-    },
-    { retries: 2 },
+  // Circuit breaker → retry-with-backoff → invoke. Read-only, so retry is safe.
+  return aiBreaker.run(() =>
+    withRetry(
+      async () => {
+        const { data, error } = await supabase.functions.invoke('classify-photo', {
+          body: { image_base64: imageBase64, media_type: mediaType },
+        })
+        if (error) throw new Error(error.message || 'AI classification failed')
+        if (data?.error) throw new Error(data.error)
+        return data as AIClassification
+      },
+      { retries: 2 },
+    ),
   )
 }
 

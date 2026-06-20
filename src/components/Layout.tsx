@@ -20,6 +20,12 @@ export function Layout() {
 
   return (
     <div className="min-h-full flex flex-col bg-app">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[2000] focus:top-2 focus:left-2 focus:bg-surface focus:text-app focus:border-2 focus:border-app focus:px-3 focus:py-2 telemetry"
+      >
+        Skip to content
+      </a>
       <header className="sticky top-0 z-[1000] border-b-2 border-app bg-surface">
         <div className="mx-auto max-w-7xl px-4 h-16 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center gap-2.5">
@@ -101,7 +107,7 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col">
+      <main id="main" className="flex-1 flex flex-col">
         <Outlet />
       </main>
     </div>

@@ -38,3 +38,17 @@ jobs:
       - name: Dependency vulnerability scan
         # Fails the job on high/critical advisories so they get patched.
         run: npm audit --audit-level=high
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: End-to-end smoke tests
+        run: npm run e2e
