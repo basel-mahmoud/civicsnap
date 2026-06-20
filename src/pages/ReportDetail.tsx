@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   addComment,
+  deleteReport,
   getReport,
   hasUpvoted,
   listComments,
@@ -37,6 +38,24 @@ export function ReportDetail() {
   const [commentText, setCommentText] = useState('')
   const [posting, setPosting] = useState(false)
   const [savingStatus, setSavingStatus] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  const canDelete = Boolean(
+    report && session && (report.reporter_id === session.user.id || isAdmin),
+  )
+
+  async function removeReport() {
+    if (!report || !canDelete) return
+    if (!confirm('Delete this report permanently? This cannot be undone.')) return
+    setDeleting(true)
+    try {
+      await deleteReport(report.id)
+      navigate('/map')
+    } catch (err) {
+      setDeleting(false)
+      alert(err instanceof Error ? err.message : 'Could not delete the report.')
+    }
+  }
 
   async function loadAll() {
     if (!id) return
@@ -278,6 +297,20 @@ export function ReportDetail() {
           </ul>
         )}
       </div>
+
+      {/* Owner / admin self-serve deletion */}
+      {canDelete && (
+        <div className="mt-8 border-t-2 border-app pt-5 flex items-center justify-between gap-3">
+          <p className="telemetry text-soft">
+            {isAdmin && report?.reporter_id !== session?.user.id
+              ? 'Admin action'
+              : 'This is your report'}
+          </p>
+          <Button variant="danger" size="sm" loading={deleting} onClick={removeReport}>
+            <Icon name="trash" size={15} /> Delete report
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

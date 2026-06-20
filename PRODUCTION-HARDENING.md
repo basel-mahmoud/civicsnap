@@ -17,7 +17,7 @@ Status of the production-readiness program. Legend: **✅ Done** · **🟡 Parti
 | Dependency scanning / patching | ✅ | CI `security` job runs `npm audit --audit-level=high` (blocks on high/critical). Currently 0 vulnerabilities. |
 | Multi-tenancy / data isolation | ✅ | RLS on every table; owner/admin scoping; storage policies scope uploads to `/<uid>/`. |
 | PII handling | 🟡 | Minimal PII (email, display name, photo, coarse geo). Photos re-encoded client-side to strip EXIF/GPS. See **Data Policy** below. |
-| Data retention / deletion | ✅ | `purge_expired()` (`0005_retention.sql`) removes rejected reports >90d; schedule via pg_cron (one-liner in the migration). Cascade deletes on user removal. **Next:** self-serve deletion UI. |
+| Data retention / deletion | ✅ | Self-serve **Delete report** (owner/admin) on the detail page; `purge_expired()` (`0005_retention.sql`) removes rejected reports >90d (pg_cron one-liner in the migration); cascade deletes on user removal. |
 | Regulatory compliance | 🟡 | GDPR-style posture documented (lawful basis, data-subject rights, minimization). Not formally certified. |
 | Audit trails / tamper-evident logging | ✅ | `status_events` is an append-only audit log (no UPDATE/DELETE RLS policies) written by `SECURITY DEFINER` triggers; every status change recorded with actor + timestamp. |
 | Security headers | ✅ | CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, COOP in `vercel.json`. |

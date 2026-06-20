@@ -229,6 +229,12 @@ export async function updateReportStatus(
   if (error) throw error
 }
 
+/** Self-serve deletion — RLS permits only the report's owner or an admin. */
+export async function deleteReport(reportId: string): Promise<void> {
+  const { error } = await supabase.from('reports').delete().eq('id', reportId)
+  if (error) throw error
+}
+
 // ---------------------------------------------------------------------------
 // Display-name lookup (for labeling reports/comments without joins in RLS).
 // ---------------------------------------------------------------------------
