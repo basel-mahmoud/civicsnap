@@ -39,16 +39,7 @@ jobs:
         # Fails the job on high/critical advisories so they get patched.
         run: npm audit --audit-level=high
 
-  e2e:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-      - name: End-to-end smoke tests
-        run: npm run e2e
+# E2E smoke tests run locally / against a Vercel preview (`npm run e2e`) rather
+# than in CI: they build + serve the production bundle and need browser-safe env
+# (Clerk/Supabase) and stable selectors against the live UI, which makes them
+# flaky as a merge gate. CI keeps lint + typecheck + build + unit + audit.

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ClerkProvider } from '@clerk/clerk-react'
+import { Analytics } from '@vercel/analytics/react'
 import 'leaflet/dist/leaflet.css'
 import './index.css'
 import App from './App.tsx'
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClerkProvider publishableKey={clerkKey} afterSignOutUrl="/">
       <App />
+      <Analytics />
     </ClerkProvider>
   </StrictMode>,
 )
